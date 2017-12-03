@@ -52,8 +52,11 @@ class RequestLimiter(RequestMidware):
                 _ = int(now)
                 if _ >= 1:
                     self._base_point += _
-                    for __ in range(_):
-                        self._req_queue.pop(0)
+                    if _ >= len(self._req_queue):
+                        self._req_queue = [0]
+                    else:
+                        for __ in range(_):
+                            self._req_queue.pop(0)
 
                 # distribute interval
                 for i, req_num in enumerate(self._req_queue):
