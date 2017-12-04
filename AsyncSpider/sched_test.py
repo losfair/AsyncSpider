@@ -82,6 +82,10 @@ class TestContext:
         logging.info("[+] All tests passed")
         os._exit(0)
 
+def on_test_timeout():
+    logging.error("[!] Test timeout")
+    os._exit(1)
+
 logging.basicConfig(level = logging.INFO)
 
 loop = asyncio.get_event_loop()
@@ -90,4 +94,7 @@ scheduler.run_workers(16)
 
 ctx = TestContext()
 scheduler.schedule(ctx.initial_feed)
+
+loop.call_later(10, on_test_timeout)
+
 loop.run_forever()
